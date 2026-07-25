@@ -335,6 +335,43 @@
         .free-item .check svg { stroke: var(--green); }
         .free-item span { font-size: 0.9rem; font-weight: 500; line-height: 1.4; }
 
+        /* ── PRICING ── */
+        .pricing {
+            padding: 80px 0; border-top: 1px solid var(--border); text-align: center;
+        }
+        .pricing-card {
+            max-width: 420px; margin: 0 auto; background: var(--surface);
+            border: 1px solid var(--border); border-radius: 20px; padding: 48px 36px;
+        }
+        .pricing-badge {
+            display: inline-block; padding: 6px 16px; border-radius: 100px;
+            background: rgba(0, 184, 148, 0.12); border: 1px solid rgba(0, 184, 148, 0.3);
+            color: var(--green); font-size: 0.8rem; font-weight: 700; margin-bottom: 20px;
+        }
+        .pricing-amount {
+            font-size: 3rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1;
+        }
+        .pricing-amount .period { font-size: 1rem; font-weight: 600; color: var(--text-muted); }
+        .pricing-usd-note { color: var(--text-muted); font-size: 0.85rem; margin-top: 8px; }
+        .pricing-cancel { color: var(--text-muted); font-size: 0.9rem; margin: 18px 0 28px; }
+        .pricing-benefits {
+            list-style: none; text-align: left; display: flex; flex-direction: column;
+            gap: 14px; margin-bottom: 32px;
+        }
+        .pricing-benefits li { display: flex; align-items: center; gap: 10px; font-size: 0.95rem; }
+        .pricing-benefits li .check {
+            flex-shrink: 0; width: 24px; height: 24px; border-radius: 7px;
+            background: rgba(0, 184, 148, 0.12); display: flex; align-items: center; justify-content: center;
+        }
+        .pricing-benefits li .check svg { stroke: var(--green); }
+        .pricing-cta {
+            display: inline-flex; width: 100%; justify-content: center;
+            padding: 14px 32px; border-radius: 12px; font-size: 1rem; font-weight: 600;
+            background: linear-gradient(135deg, var(--accent), #8b7cf7); color: #fff;
+            text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .pricing-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--accent-glow); }
+
         /* ── DOWNLOADS ── */
         .downloads {
             padding: 80px 0; border-top: 1px solid var(--border);
@@ -390,7 +427,7 @@
             .agents-grid { grid-template-columns: 1fr 1fr; }
             .download-grid { grid-template-columns: 1fr 1fr; }
             .free-grid { grid-template-columns: 1fr; }
-            .tagline-section, .capabilities, .agents, .free-section, .downloads, .video-section, .scenarios {
+            .tagline-section, .capabilities, .agents, .free-section, .downloads, .video-section, .scenarios, .pricing {
                 padding: 50px 0;
             }
             .scenario-panel, .scenario-panel.reverse {
@@ -716,6 +753,38 @@
                     </div>
                     <span>Automatizar workflows repetitivos</span>
                 </div>
+            </div>
+        </section>
+
+        <!-- PRICING -->
+        <section class="pricing" id="precos">
+            <div class="section-header">
+                <h2>Um plano. Sem complicação.</h2>
+                <p>Acesso completo a todos os agentes do Zeta.</p>
+            </div>
+
+            <div class="pricing-card">
+                <span class="pricing-badge">1º mês grátis</span>
+                <div class="pricing-amount">R$10<span class="period">/mês</span></div>
+                <div class="pricing-usd-note">≈ US$10</div>
+                <p class="pricing-cancel">Cancele quando quiser, sem multa.</p>
+
+                <ul class="pricing-benefits">
+                    <li>
+                        <span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        Todos os agentes especializados inclusos
+                    </li>
+                    <li>
+                        <span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        Uso ilimitado de tarefas
+                    </li>
+                    <li>
+                        <span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        Suporte prioritário
+                    </li>
+                </ul>
+
+                <a href="#download" class="pricing-cta">Começar grátis</a>
             </div>
         </section>
 
