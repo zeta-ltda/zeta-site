@@ -177,6 +177,35 @@
         }
         .play-btn svg { fill: #fff; margin-left: 4px; }
 
+        /* ── SCENARIOS ── */
+        .scenarios {
+            padding: 80px 0; border-top: 1px solid var(--border);
+        }
+        .scenario-panel {
+            display: flex; align-items: center; gap: 48px;
+            margin-bottom: 64px;
+        }
+        .scenario-panel:last-child { margin-bottom: 0; }
+        .scenario-panel.reverse { flex-direction: row-reverse; }
+        .scenario-media, .scenario-text { flex: 1 1 50%; min-width: 0; }
+        .scenario-media-frame {
+            aspect-ratio: 4/3; background: var(--surface); border: 1px solid var(--border);
+            border-radius: 16px; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; text-align: center; padding: 28px; gap: 10px;
+            color: var(--text-muted); transition: border-color 0.3s;
+        }
+        .scenario-media-frame:hover { border-color: var(--border-hover); }
+        .scenario-media-frame .media-type {
+            font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em;
+            text-transform: uppercase; color: var(--accent-light);
+        }
+        .scenario-media-frame p { font-size: 0.85rem; line-height: 1.5; max-width: 320px; }
+        .scenario-text h3 {
+            font-size: clamp(1.4rem, 3.5vw, 1.9rem); font-weight: 800;
+            letter-spacing: -0.02em; margin-bottom: 14px; line-height: 1.2;
+        }
+        .scenario-text p { color: var(--text-muted); font-size: 1rem; line-height: 1.6; }
+
         /* ── TAGLINE SECTION ── */
         .tagline-section {
             text-align: center; padding: 80px 0;
@@ -361,8 +390,11 @@
             .agents-grid { grid-template-columns: 1fr 1fr; }
             .download-grid { grid-template-columns: 1fr 1fr; }
             .free-grid { grid-template-columns: 1fr; }
-            .tagline-section, .capabilities, .agents, .free-section, .downloads, .video-section {
+            .tagline-section, .capabilities, .agents, .free-section, .downloads, .video-section, .scenarios {
                 padding: 50px 0;
+            }
+            .scenario-panel, .scenario-panel.reverse {
+                flex-direction: column; gap: 24px; margin-bottom: 40px;
             }
         }
 
@@ -430,6 +462,74 @@
             <div class="video-frame">
                 <div class="play-btn">
                     <svg width="28" height="28" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21"/></svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCENARIOS -->
+        <section class="scenarios" id="cenarios">
+            <div class="scenario-panel">
+                <div class="scenario-media">
+                    <div class="scenario-media-frame">
+                        <span class="media-type">🎥 Vídeo · 15-20s</span>
+                        <p>Carro se aproximando de uma garagem residencial ao entardecer, tela do painel/celular mostra notificação "Zeta: quer que eu abra a garagem?" com confirmação por voz. Iluminação quente, sensação de chegar em casa.</p>
+                    </div>
+                </div>
+                <div class="scenario-text">
+                    <h3>O carro chega. O Zeta já pergunta.</h3>
+                    <p>O Zeta percebe que você está chegando perto de casa e já pergunta se quer abrir a garagem — sem precisar tocar em nada.</p>
+                </div>
+            </div>
+
+            <div class="scenario-panel reverse">
+                <div class="scenario-media">
+                    <div class="scenario-media-frame">
+                        <span class="media-type">📷 Imagem ou vídeo · 10s</span>
+                        <p>Pulso com smartwatch mostrando notificação "Cliente pediu: criar tela de agendamento" e resposta sendo dada por voz; fundo desfocado de rua ou ambiente externo. Transmitir mobilidade e produtividade em qualquer lugar.</p>
+                    </div>
+                </div>
+                <div class="scenario-text">
+                    <h3>Um cliente pede. Você resolve do pulso.</h3>
+                    <p>Enquanto você está longe do computador, um cliente pede uma funcionalidade nova — e o Zeta já te avisa e começa a codar, direto do seu relógio.</p>
+                </div>
+            </div>
+
+            <div class="scenario-panel">
+                <div class="scenario-media">
+                    <div class="scenario-media-frame">
+                        <span class="media-type">🎥 Vídeo · 10-15s</span>
+                        <p>Notebook fechado numa mesa à noite, timelapse até o amanhecer, tela acende mostrando resumo "Zeta concluiu 12 tarefas enquanto você dormia". Tom tranquilo, produtividade passiva.</p>
+                    </div>
+                </div>
+                <div class="scenario-text">
+                    <h3>Você dorme. O Zeta trabalha.</h3>
+                    <p>Enquanto você descansa, o Zeta resolve tarefas pendentes, responde mensagens e organiza sua agenda — e deixa um resumo pronto pra quando você acordar.</p>
+                </div>
+            </div>
+
+            <div class="scenario-panel reverse">
+                <div class="scenario-media">
+                    <div class="scenario-media-frame">
+                        <span class="media-type">🎥 Vídeo · 3 cortes, ~12s</span>
+                        <p>Cena 1: Luiza mexendo um risoto no fogão, pergunta em voz alta "Zeta, qual o próximo passo dessa receita?". Transição (whip-pan) pro andar de cima. Cena 2: alguém no quarto/escritório pergunta "Zeta, onde a Luiza tá?" e pede "manda avisar ela pra ver se tem sal". Transição de volta pra cozinha. Cena 3: Luiza recebe o recado, confere o armário, sorri e confirma "Tem sim!". Tom caseiro, acolhedor, luz quente.</p>
+                    </div>
+                </div>
+                <div class="scenario-text">
+                    <h3>Uma casa. Duas pessoas. Um Zeta cuidando de tudo.</h3>
+                    <p>Luiza cozinha e pergunta o próximo passo da receita. No andar de cima, alguém pede pro Zeta avisar ela sobre o sal. O Zeta conecta as duas pontas da casa, em tempo real.</p>
+                </div>
+            </div>
+
+            <div class="scenario-panel">
+                <div class="scenario-media">
+                    <div class="scenario-media-frame">
+                        <span class="media-type">🎥 Vídeo · 10-15s</span>
+                        <p>Pessoa andando na calçada, fone de ouvido, digitando no celular. Corta pra notificação recebida com foto do fogão desligado, câmera da cozinha ao fundo. Tom prático, tranquilizador.</p>
+                    </div>
+                </div>
+                <div class="scenario-text">
+                    <h3>Longe de casa, mas de olho em tudo.</h3>
+                    <p>Andando na rua, com o fone no ouvido, você manda uma mensagem perguntando se deixou o forno desligado — o Zeta confere pela câmera de casa e te manda a foto na hora.</p>
                 </div>
             </div>
         </section>
