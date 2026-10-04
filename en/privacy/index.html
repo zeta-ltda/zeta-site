@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Zeta</title>
+  <meta name="description" content="How Zeta collects, uses, stores and shares data, including Google user data (Sign-In and Google Calendar).">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/site.css?v=20261004">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container">
+    <a class="brand" href="/"><img src="/assets/zeta-mark.svg" alt="">Zeta</a>
+    <div class="nav-links">
+      <a href="/en/terms">Terms of Service</a>
+      <a class="btn btn-primary btn-small" href="https://app.zeta-assistant.com">Sign in</a>
+    </div>
+  </div>
+</nav>
+
+<main class="legal">
+  <div class="container">
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated: October 4, 2026</p>
+    <p class="lang"><a href="/privacidade">Ler em português</a> (the Portuguese version prevails in case of conflict)</p>
+
+    <p>This policy explains what data Zeta collects, why, how long we keep it, who we share it with and how you exercise your rights. It applies to the Zeta app on the web (<a href="https://app.zeta-assistant.com">app.zeta-assistant.com</a>), the macOS, Android and iPhone apps, and this website.</p>
+
+    <h2>1. Who is responsible</h2>
+    <p>The data controller is <strong>PABLO ALFONSO TEIXEIRA UNGARO LTDA</strong>, Brazilian company registration (CNPJ) 47.460.147/0001-28 ("Zeta", "we"). For any privacy matter, including reaching our data protection officer, email <a href="mailto:my.zeta.assistant@gmail.com">my.zeta.assistant@gmail.com</a>.</p>
+
+    <h2>2. Data we collect</h2>
+    <h3>2.1 Account</h3>
+    <p>When you sign in with Google we receive your <strong>name, email address, profile picture and Google account identifier</strong>. We use them to create and identify your account. We never receive your password.</p>
+    <h3>2.2 What you send to Zeta</h3>
+    <ul>
+      <li>Messages, requests and replies in your conversations.</li>
+      <li>Voice: audio is streamed in real time for speech recognition and the spoken reply. We keep the <strong>transcript</strong> of the conversation, not the audio. "Ok Zeta" wake-word detection runs on your own device.</li>
+      <li>Files, photos and documents you attach.</li>
+    </ul>
+    <h3>2.3 Integrations you connect</h3>
+    <ul>
+      <li><strong>Google Calendar</strong> — see section 3.</li>
+      <li><strong>Home Assistant</strong> — your Home Assistant address and access token (stored encrypted), to run the home commands you ask for.</li>
+      <li><strong>Slack</strong> — if you install Zeta in a Slack workspace, the messages in which Zeta is mentioned.</li>
+    </ul>
+    <h3>2.4 Your devices</h3>
+    <p>Device name, operating system and app version. In the macOS app, when you ask for a task on your computer, Zeta captures the screen during that task to see what it is doing; these captures are used only to carry out your request.</p>
+    <h3>2.5 Technical data</h3>
+    <p>Performance and error measurements (response times, failures, app version) <strong>without conversation content</strong>, and technical diagnostic logs.</p>
+
+    <h2>3. Google user data (Sign-In and Google Calendar)</h2>
+    <p>This section specifically describes how Zeta accesses, uses, stores and shares data received from Google APIs.</p>
+    <h3>3.1 What we access</h3>
+    <ul>
+      <li><strong>Sign in with Google</strong> (scopes <code>openid</code>, <code>email</code>, <code>profile</code>): name, email, picture and account identifier.</li>
+      <li><strong>Google Calendar</strong>, only if you connect it under Settings → Integrations:
+        <ul>
+          <li><code>calendar.events</code> — view, create, edit and delete events on calendars you can edit;</li>
+          <li><code>calendar.calendarlist.readonly</code> — view the list of your calendars, so you can choose a default calendar.</li>
+        </ul>
+      </li>
+    </ul>
+    <h3>3.2 How we use it</h3>
+    <p>We use your calendar data <strong>only to do what you ask</strong>: create, look up, reschedule and cancel events; list your calendars; and, when you ask to invite someone by name, look up that person's email among the attendees of your recent events. None of this happens without a request from you. Zeta asks for confirmation before cancelling events that have other guests or whole recurring series.</p>
+    <h3>3.3 How we store it</h3>
+    <ul>
+      <li>The token that grants access to your calendar is stored <strong>encrypted</strong> (AES-256-GCM) in our database.</li>
+      <li>We do not copy your calendar. Event details appear only in the messages of the conversation in which you made the request and are stored with that conversation.</li>
+    </ul>
+    <h3>3.4 Who we share it with</h3>
+    <p>To answer a request, the event data needed is processed by the AI provider that generates the reply (Anthropic), under contract and for that purpose only. <strong>We do not sell Google user data, do not use it for advertising, do not transfer it to third parties for any other purpose and do not use it to train artificial intelligence models.</strong></p>
+    <div class="callout">
+      <p>Zeta's use and transfer to any other app of information received from Google APIs will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+    </div>
+    <h3>3.5 How to revoke access</h3>
+    <p>Go to Settings → Integrations → Google Calendar → <strong>Disconnect</strong>: Zeta revokes access at Google and deletes the token from our database immediately. You can also remove access at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.</p>
+
+    <h2>4. Purposes and legal bases</h2>
+    <table>
+      <thead><tr><th>Purpose</th><th>Legal basis (Brazilian LGPD)</th></tr></thead>
+      <tbody>
+        <tr><td>Create your account and provide the service (conversations, voice, tasks, integrations)</td><td>Performance of a contract (art. 7, V)</td></tr>
+        <tr><td>Access your calendar, your home and other integrations</td><td>Performance of a contract, following your authorization for each integration (art. 7, V)</td></tr>
+        <tr><td>Security, abuse prevention and troubleshooting</td><td>Legitimate interest (art. 7, IX)</td></tr>
+        <tr><td>Improving product performance with content-free metrics</td><td>Legitimate interest (art. 7, IX)</td></tr>
+        <tr><td>Complying with legal obligations</td><td>Legal obligation (art. 7, II)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>5. Who we share data with</h2>
+    <p>We use providers that process data on our behalf, under contract, only to operate Zeta:</p>
+    <table>
+      <thead><tr><th>Provider</th><th>Purpose</th><th>Location</th></tr></thead>
+      <tbody>
+        <tr><td>Anthropic (Claude)</td><td>Processing conversations and running tasks, including screen captures of computer tasks</td><td>USA</td></tr>
+        <tr><td>OpenAI</td><td>Real-time voice conversation, transcription and web search by voice</td><td>USA</td></tr>
+        <tr><td>Google</td><td>Sign-In and Google Calendar</td><td>USA</td></tr>
+        <tr><td>Railway</td><td>Server and database hosting</td><td>USA</td></tr>
+        <tr><td>GitHub</td><td>Distribution of app installers</td><td>USA</td></tr>
+        <tr><td>Slack</td><td>Only if you install the integration</td><td>USA</td></tr>
+      </tbody>
+    </table>
+    <p>Under the commercial API terms we use, Anthropic and OpenAI do not use this data to train their models. We do not sell or rent personal data. We may disclose data if required by law or court order.</p>
+
+    <h2>6. International transfers</h2>
+    <p>The providers above are in the United States, so your data is transferred outside Brazil, based on the contractual safeguards of those providers, as allowed by art. 33 of the LGPD.</p>
+
+    <h2>7. How long we keep data</h2>
+    <table>
+      <thead><tr><th>Data</th><th>Retention</th></tr></thead>
+      <tbody>
+        <tr><td>Account, conversations and attachments</td><td>While your account exists</td></tr>
+        <tr><td>Integration tokens (Google Calendar, Home Assistant)</td><td>Until you disconnect the integration or delete your account</td></tr>
+        <tr><td>Performance metrics (no content)</td><td>180 days; after that, only aggregated anonymous totals</td></tr>
+        <tr><td>Technical diagnostic logs</td><td>30 days</td></tr>
+        <tr><td>Diagnostic audio snippets, when the feature is enabled</td><td>7 days</td></tr>
+      </tbody>
+    </table>
+
+    <h2>8. Security</h2>
+    <p>All traffic uses HTTPS. Integration tokens are encrypted. Access to production data is restricted. No system is 100% secure; if an incident may put you at risk, we will notify you and the Brazilian data protection authority (ANPD) as required by law.</p>
+
+    <h2>9. Your rights</h2>
+    <p>You may request at any time: confirmation of and access to your data, correction, anonymization or deletion, portability, information about who we share it with, and revocation of authorizations (art. 18 of the LGPD). Email <a href="mailto:my.zeta.assistant@gmail.com">my.zeta.assistant@gmail.com</a> from your account's email address; we reply within 15 days. You may also file a complaint with the ANPD.</p>
+
+    <h2>10. Account deletion</h2>
+    <p>To delete your account, email <a href="mailto:my.zeta.assistant@gmail.com">my.zeta.assistant@gmail.com</a> from your account's email address. Within 30 days we delete the account, conversations, attachments and integration tokens, and revoke Google Calendar access. We keep only what the law requires.</p>
+
+    <h2>11. Children and teenagers</h2>
+    <p>Zeta is not intended for anyone under 18 and does not knowingly collect their data. If you know of an account belonging to a minor, write to us and we will delete it.</p>
+
+    <h2>12. Cookies and local storage</h2>
+    <p>The app stores in your browser or device only what is needed to keep you signed in and remember preferences. We do not use advertising or tracking cookies. This website does not use analytics; it loads its font from Google Fonts.</p>
+
+    <h2>13. Changes to this policy</h2>
+    <p>If we make a material change, we will notify you in the app or by email before it takes effect. The date at the top shows the last update.</p>
+
+    <h2>14. Contact</h2>
+    <p>PABLO ALFONSO TEIXEIRA UNGARO LTDA · CNPJ 47.460.147/0001-28 · <a href="mailto:my.zeta.assistant@gmail.com">my.zeta.assistant@gmail.com</a></p>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/en/privacy">Privacy Policy</a>
+      <a href="/en/terms">Terms of Service</a>
+      <a href="/privacidade">Português</a>
+    </div>
+    <p>© 2026 PABLO ALFONSO TEIXEIRA UNGARO LTDA · CNPJ 47.460.147/0001-28 · <a href="mailto:my.zeta.assistant@gmail.com">my.zeta.assistant@gmail.com</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

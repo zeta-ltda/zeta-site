@@ -1,874 +1,256 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zeta - Seu Assistente Personalizado</title>
-    <meta name="description" content="Zeta - Uma Siri que não só fala, mas faz. Agentes de IA especializados que trabalham por você.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --bg: #06060b;
-            --surface: #0e0e16;
-            --surface-2: #14141f;
-            --border: #1a1a2e;
-            --border-hover: #2a2a44;
-            --text: #e8e8f0;
-            --text-muted: #7a7a95;
-            --accent: #6c5ce7;
-            --accent-light: #a29bfe;
-            --accent-glow: rgba(108, 92, 231, 0.3);
-            --teal: #00cec9;
-            --teal-glow: rgba(0, 206, 201, 0.3);
-            --pink: #fd79a8;
-            --orange: #fdcb6e;
-            --green: #00b894;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .bg-glow {
-            position: fixed; inset: 0;
-            background:
-                radial-gradient(ellipse 80% 60% at 20% 20%, rgba(108, 92, 231, 0.07) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 80% at 80% 80%, rgba(0, 206, 201, 0.05) 0%, transparent 60%);
-            pointer-events: none; z-index: 0;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ── NAV ── */
-        nav {
-            padding: 20px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .logo {
-            font-size: 1.4rem; font-weight: 800;
-            background: linear-gradient(135deg, var(--accent), var(--teal));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .nav-links { display: flex; gap: 28px; }
-        .nav-links a {
-            color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500;
-            transition: color 0.2s;
-        }
-        .nav-links a:hover { color: var(--text); }
-        .nav-cta {
-            padding: 8px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
-            background: var(--accent); color: #fff; text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-glow); }
-
-        /* ── HERO ── */
-        .hero {
-            text-align: center;
-            padding: 80px 0 40px;
-        }
-        .badge {
-            display: inline-block; padding: 6px 16px; border-radius: 100px;
-            background: rgba(108, 92, 231, 0.1); border: 1px solid rgba(108, 92, 231, 0.2);
-            color: var(--accent-light); font-size: 0.8rem; font-weight: 500;
-            margin-bottom: 24px; letter-spacing: 0.02em;
-        }
-        .hero h1 {
-            font-size: clamp(2.2rem, 6vw, 3.8rem);
-            font-weight: 900; line-height: 1.08; letter-spacing: -0.03em;
-            margin-bottom: 20px;
-        }
-        .hero h1 .gradient {
-            background: linear-gradient(135deg, var(--accent), var(--teal));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-        }
-        .hero-sub {
-            font-size: clamp(1rem, 2.5vw, 1.25rem);
-            color: var(--text-muted); max-width: 580px; margin: 0 auto 40px; line-height: 1.6;
-        }
-        .hero-ctas {
-            display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
-            margin-bottom: 56px;
-        }
-        .btn-primary {
-            padding: 14px 32px; border-radius: 12px; font-size: 1rem; font-weight: 600;
-            background: linear-gradient(135deg, var(--accent), #8b7cf7); color: #fff;
-            text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
-            display: inline-flex; align-items: center; gap: 8px;
-        }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--accent-glow); }
-        .btn-secondary {
-            padding: 14px 32px; border-radius: 12px; font-size: 1rem; font-weight: 600;
-            background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
-            text-decoration: none; transition: all 0.2s;
-            display: inline-flex; align-items: center; gap: 8px;
-        }
-        .btn-secondary:hover { border-color: var(--border-hover); background: var(--surface); }
-
-        /* ── APP PREVIEW ── */
-        .app-preview {
-            max-width: 900px; margin: 0 auto 80px; position: relative;
-        }
-        .app-preview-frame {
-            background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-            overflow: hidden; aspect-ratio: 16/10;
-            display: flex; align-items: center; justify-content: center;
-            position: relative;
-        }
-        .app-preview-frame .placeholder-img {
-            width: 100%; height: 100%; object-fit: cover;
-            background: linear-gradient(145deg, #0e0e18, #161625);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: var(--text-muted); gap: 12px;
-        }
-        .placeholder-img svg { opacity: 0.3; }
-        .placeholder-img span { font-size: 0.85rem; opacity: 0.5; }
-        .app-preview-glow {
-            position: absolute; inset: -40px; z-index: -1;
-            background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 70%);
-            filter: blur(60px); opacity: 0.5;
-        }
-
-        /* ── VIDEO ── */
-        .video-section {
-            text-align: center; padding: 60px 0 80px;
-        }
-        .video-section h2 {
-            font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 800;
-            letter-spacing: -0.02em; margin-bottom: 12px;
-        }
-        .video-section .subtitle {
-            color: var(--text-muted); margin-bottom: 40px; font-size: 1rem;
-        }
-        .video-frame {
-            max-width: 800px; margin: 0 auto; aspect-ratio: 16/9;
-            background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; position: relative; overflow: hidden;
-            transition: border-color 0.3s;
-        }
-        .video-frame:hover { border-color: var(--accent); }
-        .play-btn {
-            width: 72px; height: 72px; border-radius: 50%;
-            background: rgba(108, 92, 231, 0.9); display: flex; align-items: center; justify-content: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .video-frame:hover .play-btn {
-            transform: scale(1.1); box-shadow: 0 0 40px var(--accent-glow);
-        }
-        .play-btn svg { fill: #fff; margin-left: 4px; }
-
-        /* ── SCENARIOS ── */
-        .scenarios {
-            padding: 80px 0; border-top: 1px solid var(--border);
-        }
-        .scenario-panel {
-            display: flex; align-items: center; gap: 48px;
-            margin-bottom: 64px;
-        }
-        .scenario-panel:last-child { margin-bottom: 0; }
-        .scenario-panel.reverse { flex-direction: row-reverse; }
-        .scenario-media, .scenario-text { flex: 1 1 50%; min-width: 0; }
-        .scenario-media-frame {
-            aspect-ratio: 4/3; background: var(--surface); border: 1px solid var(--border);
-            border-radius: 16px; display: flex; flex-direction: column; align-items: center;
-            justify-content: center; text-align: center; padding: 28px; gap: 10px;
-            color: var(--text-muted);
-        }
-        .scenario-media-frame .media-type {
-            font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em;
-            color: var(--accent-light);
-        }
-        .scenario-media-frame p { font-size: 0.85rem; line-height: 1.5; max-width: 320px; }
-        .scenario-text h3 {
-            font-size: clamp(1.4rem, 3.5vw, 1.9rem); font-weight: 800;
-            letter-spacing: -0.02em; margin-bottom: 14px; line-height: 1.2;
-        }
-        .scenario-text p { color: var(--text-muted); font-size: 1rem; line-height: 1.6; }
-
-        /* ── TAGLINE SECTION ── */
-        .tagline-section {
-            text-align: center; padding: 80px 0;
-            border-top: 1px solid var(--border);
-        }
-        .tagline-section h2 {
-            font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 900;
-            letter-spacing: -0.03em; margin-bottom: 16px; line-height: 1.15;
-        }
-        .tagline-section p {
-            color: var(--text-muted); font-size: 1.1rem; max-width: 600px;
-            margin: 0 auto; line-height: 1.6;
-        }
-
-        /* ── CAPABILITIES ── */
-        .capabilities {
-            padding: 80px 0; border-top: 1px solid var(--border);
-        }
-        .section-header {
-            text-align: center; margin-bottom: 52px;
-        }
-        .section-header h2 {
-            font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 800;
-            letter-spacing: -0.02em; margin-bottom: 12px;
-        }
-        .section-header p {
-            color: var(--text-muted); font-size: 1rem; max-width: 520px; margin: 0 auto;
-        }
-        .cap-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 16px;
-        }
-        .cap-card {
-            background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-            padding: 32px 28px; transition: all 0.3s;
-        }
-        .cap-card:hover {
-            border-color: var(--border-hover); transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-        }
-        .cap-icon {
-            width: 48px; height: 48px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 18px; font-size: 1.4rem;
-        }
-        .cap-card h3 {
-            font-size: 1.05rem; font-weight: 700; margin-bottom: 8px;
-        }
-        .cap-card p {
-            color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;
-        }
-        .cap-card .tag {
-            display: inline-block; margin-top: 14px; padding: 4px 10px;
-            border-radius: 6px; font-size: 0.75rem; font-weight: 600;
-        }
-
-        .icon-tasks { background: rgba(108, 92, 231, 0.12); }
-        .icon-social { background: rgba(253, 121, 168, 0.12); }
-        .icon-creative { background: rgba(253, 203, 110, 0.12); }
-        .icon-dev { background: rgba(0, 206, 201, 0.12); }
-        .icon-content { background: rgba(0, 184, 148, 0.12); }
-        .icon-auto { background: rgba(162, 155, 254, 0.12); }
-
-        .tag-tasks { background: rgba(108, 92, 231, 0.1); color: var(--accent-light); }
-        .tag-social { background: rgba(253, 121, 168, 0.1); color: var(--pink); }
-        .tag-creative { background: rgba(253, 203, 110, 0.1); color: var(--orange); }
-        .tag-dev { background: rgba(0, 206, 201, 0.1); color: var(--teal); }
-        .tag-content { background: rgba(0, 184, 148, 0.1); color: var(--green); }
-        .tag-auto { background: rgba(162, 155, 254, 0.1); color: var(--accent-light); }
-
-        /* ── AGENTS ── */
-        .agents {
-            padding: 80px 0; border-top: 1px solid var(--border);
-        }
-        .agents-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 16px;
-        }
-        .agent-card {
-            background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-            padding: 28px 24px; text-align: center; transition: all 0.3s;
-        }
-        .agent-card:hover {
-            border-color: var(--border-hover); transform: translateY(-2px);
-        }
-        .agent-avatar {
-            width: 56px; height: 56px; border-radius: 16px;
-            margin: 0 auto 16px; display: flex; align-items: center; justify-content: center;
-            font-size: 1.6rem;
-        }
-        .agent-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
-        .agent-card p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; }
-        .agent-badge {
-            display: inline-block; margin-top: 12px; padding: 3px 10px;
-            border-radius: 6px; font-size: 0.7rem; font-weight: 600;
-            background: rgba(108, 92, 231, 0.1); color: var(--accent-light);
-        }
-
-        /* ── FREE YOURSELF ── */
-        .free-section {
-            padding: 80px 0; text-align: center;
-            border-top: 1px solid var(--border);
-        }
-        .free-section h2 {
-            font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 900;
-            letter-spacing: -0.03em; margin-bottom: 20px; line-height: 1.15;
-        }
-        .free-section > p {
-            color: var(--text-muted); font-size: 1.1rem; max-width: 600px;
-            margin: 0 auto 48px; line-height: 1.6;
-        }
-        .free-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px; max-width: 800px; margin: 0 auto;
-        }
-        .free-item {
-            background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
-            padding: 24px 20px; display: flex; align-items: flex-start; gap: 14px;
-            text-align: left;
-        }
-        .free-item .check {
-            flex-shrink: 0; width: 28px; height: 28px; border-radius: 8px;
-            background: rgba(0, 184, 148, 0.12); display: flex; align-items: center; justify-content: center;
-        }
-        .free-item .check svg { stroke: var(--green); }
-        .free-item span { font-size: 0.9rem; font-weight: 500; line-height: 1.4; }
-
-        /* ── PRICING ── */
-        .pricing {
-            padding: 80px 0; border-top: 1px solid var(--border); text-align: center;
-        }
-        .pricing-card {
-            max-width: 420px; margin: 0 auto; background: var(--surface);
-            border: 1px solid var(--border); border-radius: 20px; padding: 48px 36px;
-        }
-        .pricing-badge {
-            display: inline-block; padding: 6px 16px; border-radius: 100px;
-            background: rgba(0, 184, 148, 0.12); border: 1px solid rgba(0, 184, 148, 0.3);
-            color: var(--green); font-size: 0.8rem; font-weight: 700; margin-bottom: 20px;
-        }
-        .pricing-amount {
-            font-size: 3rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1;
-        }
-        .pricing-amount .period { font-size: 1rem; font-weight: 600; color: var(--text-muted); }
-        .pricing-cancel { color: var(--text-muted); font-size: 0.9rem; margin: 18px 0 28px; }
-        .pricing-benefits {
-            list-style: none; text-align: left; display: flex; flex-direction: column;
-            gap: 14px; margin-bottom: 32px;
-        }
-        .pricing-benefits li { display: flex; align-items: center; gap: 10px; font-size: 0.95rem; }
-        .pricing-benefits li .check {
-            flex-shrink: 0; width: 28px; height: 28px; border-radius: 8px;
-            background: rgba(0, 184, 148, 0.12); display: flex; align-items: center; justify-content: center;
-        }
-        .pricing-benefits li .check svg { stroke: var(--green); }
-        .pricing-cta {
-            width: 100%; justify-content: center;
-        }
-
-        /* ── DOWNLOADS ── */
-        .downloads {
-            padding: 80px 0; border-top: 1px solid var(--border);
-        }
-        .download-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 14px; max-width: 900px; margin: 0 auto;
-        }
-        .download-card {
-            background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
-            padding: 24px 16px; text-align: center; transition: all 0.3s;
-            text-decoration: none; color: var(--text);
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
-        }
-        .download-card:hover {
-            border-color: var(--accent); transform: translateY(-3px);
-            box-shadow: 0 8px 32px rgba(108, 92, 231, 0.15);
-        }
-        .download-card .dl-icon { width: 36px; height: 36px; }
-        .download-card .dl-icon svg { width: 36px; height: 36px; fill: var(--text-muted); transition: fill 0.3s; }
-        .download-card:hover .dl-icon svg { fill: var(--accent-light); }
-        .download-card .platform-name { font-weight: 600; font-size: 0.9rem; }
-        .download-card .file-info { font-size: 0.75rem; color: var(--text-muted); }
-        .dl-btn {
-            display: inline-flex; align-items: center; gap: 5px;
-            padding: 6px 16px; border-radius: 8px;
-            background: rgba(108, 92, 231, 0.12); color: var(--accent-light);
-            font-size: 0.8rem; font-weight: 500; transition: all 0.3s;
-        }
-        .download-card:hover .dl-btn { background: var(--accent); color: #fff; }
-
-        /* ── FOOTER ── */
-        footer {
-            padding: 40px 0; border-top: 1px solid var(--border);
-            text-align: center;
-        }
-        footer .footer-logo {
-            font-size: 1.2rem; font-weight: 800; margin-bottom: 8px;
-            background: linear-gradient(135deg, var(--accent), var(--teal));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-        }
-        footer p { color: var(--text-muted); font-size: 0.8rem; }
-
-        /* ── MOBILE ── */
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .hero { padding: 50px 0 30px; }
-            .hero-ctas { flex-direction: column; align-items: center; }
-            .btn-primary, .btn-secondary { width: 100%; max-width: 300px; justify-content: center; }
-            .app-preview { margin-bottom: 50px; }
-            .cap-grid { grid-template-columns: 1fr; }
-            .agents-grid { grid-template-columns: 1fr 1fr; }
-            .download-grid { grid-template-columns: 1fr 1fr; }
-            .free-grid { grid-template-columns: 1fr; }
-            .tagline-section, .capabilities, .agents, .free-section, .downloads, .video-section, .scenarios, .pricing {
-                padding: 50px 0;
-            }
-            .scenario-panel, .scenario-panel.reverse {
-                flex-direction: column; gap: 24px; margin-bottom: 40px;
-            }
-        }
-
-        @media (max-width: 420px) {
-            .container { padding: 0 16px; }
-            .agents-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeta — Conversa, cuida da casa e trabalha por você</title>
+  <meta name="description" content="O Zeta é um assistente de IA que conversa como o ChatGPT, cuida da casa como a Alexa e trabalha como o Claude — por voz ou texto, no celular, no computador e no tablet. Grátis durante o beta.">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <meta property="og:title" content="Zeta — seu assistente de IA">
+  <meta property="og:description" content="Conversa como o ChatGPT. Cuida da casa como a Alexa. Trabalha como o Claude. Num assistente só.">
+  <meta property="og:image" content="https://zeta-assistant.com/assets/zeta-logo-512.png">
+  <meta property="og:url" content="https://zeta-assistant.com/">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/site.css?v=20261004">
 </head>
 <body>
-    <div class="bg-glow"></div>
 
-    <div class="container">
-        <!-- NAV -->
-        <nav>
-            <div class="logo">zeta</div>
-            <div class="nav-links">
-                <a href="#capacidades">Capacidades</a>
-                <a href="#download">Como instalar</a>
-                <a href="#precos">Preços</a>
-            </div>
-            <a href="#download" class="nav-cta">Baixar grátis</a>
-        </nav>
-
-        <!-- HERO -->
-        <section class="hero">
-            <div class="badge">Agente de Tarefas com IA</div>
-            <h1>
-                Uma Siri que não<br>só fala, mas <span class="gradient">faz</span>.
-            </h1>
-            <p class="hero-sub">
-                Seu assistente pessoal com agentes especializados que executam tarefas reais.
-                Livre-se de tudo que não faz parte da sua atividade principal.
-            </p>
-            <div class="hero-ctas">
-                <a href="#download" class="btn-primary">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                    Baixar para desktop
-                </a>
-                <a href="#video" class="btn-secondary">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                    Ver em ação
-                </a>
-            </div>
-        </section>
-
-        <!-- APP SCREENSHOT -->
-        <div class="app-preview">
-            <div class="app-preview-glow"></div>
-            <div class="app-preview-frame">
-                <div class="placeholder-img">
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
-                    </svg>
-                    <span>Screenshot do app - em breve</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- VIDEO -->
-        <section class="video-section" id="video">
-            <h2>Veja o Zeta em ação</h2>
-            <p class="subtitle">Em 60 segundos, entenda como o Zeta transforma seu dia a dia</p>
-            <div class="video-frame">
-                <div class="play-btn">
-                    <svg width="28" height="28" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21"/></svg>
-                </div>
-            </div>
-        </section>
-
-        <!-- SCENARIOS -->
-        <section class="scenarios" id="cenarios">
-            <div class="section-header">
-                <h2>O Zeta em qualquer lugar da sua vida</h2>
-                <p>Cenários reais de quem já vive com um assistente que faz, não só responde.</p>
-            </div>
-
-            <div class="scenario-panel">
-                <div class="scenario-media">
-                    <div class="scenario-media-frame">
-                        <span class="media-type">🎥 Vídeo · 15-20s</span>
-                        <p>Carro se aproximando de uma garagem residencial ao entardecer, tela do painel/celular mostra notificação "Zeta: quer que eu abra a garagem?" com confirmação por voz. Iluminação quente, sensação de chegar em casa.</p>
-                    </div>
-                </div>
-                <div class="scenario-text">
-                    <h3>O carro chega. O Zeta já pergunta.</h3>
-                    <p>O Zeta percebe que você está chegando perto de casa e já pergunta se quer abrir a garagem — sem precisar tocar em nada.</p>
-                </div>
-            </div>
-
-            <div class="scenario-panel reverse">
-                <div class="scenario-media">
-                    <div class="scenario-media-frame">
-                        <span class="media-type">📷 Imagem ou vídeo · 10s</span>
-                        <p>Pulso com smartwatch mostrando notificação "Cliente pediu: criar tela de agendamento" e resposta sendo dada por voz; fundo desfocado de rua ou ambiente externo. Transmitir mobilidade e produtividade em qualquer lugar.</p>
-                    </div>
-                </div>
-                <div class="scenario-text">
-                    <h3>Um cliente pede. Você resolve do pulso.</h3>
-                    <p>Enquanto você está longe do computador, um cliente pede uma funcionalidade nova — e o Zeta já te avisa e começa a codar, direto do seu relógio.</p>
-                </div>
-            </div>
-
-            <div class="scenario-panel">
-                <div class="scenario-media">
-                    <div class="scenario-media-frame">
-                        <span class="media-type">🎥 Vídeo · 10-15s</span>
-                        <p>Notebook fechado numa mesa à noite, timelapse até o amanhecer, tela acende mostrando resumo "Zeta concluiu 12 tarefas enquanto você dormia". Tom tranquilo, produtividade passiva.</p>
-                    </div>
-                </div>
-                <div class="scenario-text">
-                    <h3>Você dorme. O Zeta trabalha.</h3>
-                    <p>Enquanto você descansa, o Zeta resolve tarefas pendentes, responde mensagens e organiza sua agenda — e deixa um resumo pronto pra quando você acordar.</p>
-                </div>
-            </div>
-
-            <div class="scenario-panel reverse">
-                <div class="scenario-media">
-                    <div class="scenario-media-frame">
-                        <span class="media-type">🎥 Vídeo · ~12s</span>
-                        <p>Três cortes com whip-pan entre andares: Luiza cozinhando e perguntando o próximo passo da receita; alguém no quarto pedindo pro Zeta avisar sobre o sal; Luiza recebendo o recado e confirmando. Tom caseiro, luz quente.</p>
-                    </div>
-                </div>
-                <div class="scenario-text">
-                    <h3>Uma casa. Duas pessoas. Um Zeta cuidando de tudo.</h3>
-                    <p>Luiza cozinha e pergunta o próximo passo da receita. No andar de cima, alguém pede pro Zeta avisar ela sobre o sal. O Zeta conecta as duas pontas da casa, em tempo real.</p>
-                </div>
-            </div>
-
-            <div class="scenario-panel">
-                <div class="scenario-media">
-                    <div class="scenario-media-frame">
-                        <span class="media-type">🎥 Vídeo · 10-15s</span>
-                        <p>Pessoa andando na calçada, fone de ouvido, digitando no celular. Corta pra notificação recebida com foto do fogão desligado, câmera da cozinha ao fundo. Tom prático, tranquilizador.</p>
-                    </div>
-                </div>
-                <div class="scenario-text">
-                    <h3>Longe de casa, mas de olho em tudo.</h3>
-                    <p>Andando na rua, com o fone no ouvido, você manda uma mensagem perguntando se deixou o forno desligado — o Zeta confere pela câmera de casa e te manda a foto na hora.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAGLINE -->
-        <section class="tagline-section">
-            <h2>Não é qualquer assistente.<br>É o <span class="gradient">SEU</span> assistente<br>personalizado pra você.</h2>
-            <p>
-                O Zeta aprende o contexto do seu negócio, entende como você trabalha
-                e executa tarefas com agentes especializados. Você foca no que importa.
-            </p>
-        </section>
-
-        <!-- CAPABILITIES -->
-        <section class="capabilities" id="capacidades">
-            <div class="section-header">
-                <h2>O que o Zeta faz por você</h2>
-                <p>Agentes especializados que trabalham juntos para resolver problemas reais do seu dia a dia</p>
-            </div>
-
-            <div class="cap-grid">
-                <div class="cap-card">
-                    <div class="cap-icon icon-tasks">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-                    </div>
-                    <h3>Gerencia suas tarefas</h3>
-                    <p>Organiza, prioriza e executa tarefas automaticamente. Desde responder emails até criar documentos completos.</p>
-                    <span class="tag tag-tasks">Agente Tarefas</span>
-                </div>
-
-                <div class="cap-card">
-                    <div class="cap-icon icon-social">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fd79a8" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
-                    </div>
-                    <h3>Posta no Instagram</h3>
-                    <p>Cria conteúdo visual, escreve legendas e agenda postagens. Seu perfil ativo sem você precisar abrir o app.</p>
-                    <span class="tag tag-social">Agente Social Media</span>
-                </div>
-
-                <div class="cap-card">
-                    <div class="cap-icon icon-creative">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fdcb6e" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    </div>
-                    <h3>Cria imagens e vídeos</h3>
-                    <p>Gera artes, thumbnails, vídeos curtos e animações. Conteúdo profissional sem precisar de designer.</p>
-                    <span class="tag tag-creative">Agente Criativo</span>
-                </div>
-
-                <div class="cap-card">
-                    <div class="cap-icon icon-dev">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00cec9" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                    </div>
-                    <h3>Resolve tarefas de dev</h3>
-                    <p>Cria issues, faz code reviews, implementa features e corrige bugs. Seu dev assistant 24/7.</p>
-                    <span class="tag tag-dev">Agente Dev</span>
-                </div>
-
-                <div class="cap-card">
-                    <div class="cap-icon icon-content">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00b894" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
-                    </div>
-                    <h3>Publica no YouTube</h3>
-                    <p>Edita vídeos, cria thumbnails, escreve títulos e descrições otimizadas. Seu canal cresce no piloto automático.</p>
-                    <span class="tag tag-content">Agente YouTube</span>
-                </div>
-
-                <div class="cap-card">
-                    <div class="cap-icon icon-auto">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a29bfe" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-                    </div>
-                    <h3>Automatiza qualquer coisa</h3>
-                    <p>Conecte agentes entre si para workflows complexos. O Zeta orquestra tudo sem você levantar um dedo.</p>
-                    <span class="tag tag-auto">Orquestrador</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- SPECIALIST AGENTS -->
-        <section class="agents" id="agentes">
-            <div class="section-header">
-                <h2>Agentes especialistas que você pluga</h2>
-                <p>Cada agente é treinado para um tipo de tarefa. Combine quantos precisar.</p>
-            </div>
-
-            <div class="agents-grid">
-                <div class="agent-card">
-                    <div class="agent-avatar" style="background: rgba(253,121,168,0.1);">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fd79a8" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
-                    </div>
-                    <h3>Social Media</h3>
-                    <p>Cria posts, stories, reels e agenda publicações no Instagram, TikTok e X.</p>
-                    <span class="agent-badge">Plugável</span>
-                </div>
-
-                <div class="agent-card">
-                    <div class="agent-avatar" style="background: rgba(253,203,110,0.1);">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fdcb6e" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-                    </div>
-                    <h3>Gerador de Imagens</h3>
-                    <p>Cria artes, banners, thumbnails e imagens para qualquer plataforma.</p>
-                    <span class="agent-badge">Plugável</span>
-                </div>
-
-                <div class="agent-card">
-                    <div class="agent-avatar" style="background: rgba(0,206,201,0.1);">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00cec9" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-                    </div>
-                    <h3>Editor de Vídeo</h3>
-                    <p>Corta, edita e monta vídeos para YouTube, Reels e TikTok automaticamente.</p>
-                    <span class="agent-badge">Plugável</span>
-                </div>
-
-                <div class="agent-card">
-                    <div class="agent-avatar" style="background: rgba(108,92,231,0.1);">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                    </div>
-                    <h3>Dev Assistant</h3>
-                    <p>Cria issues, faz PRs, code review e implementa features no seu repositório.</p>
-                    <span class="agent-badge">Plugável</span>
-                </div>
-
-                <div class="agent-card">
-                    <div class="agent-avatar" style="background: rgba(0,184,148,0.1);">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00b894" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-                    </div>
-                    <h3>YouTube Manager</h3>
-                    <p>Upload, thumbnails, títulos SEO, descrições e cards. Seu canal no automático.</p>
-                    <span class="agent-badge">Plugável</span>
-                </div>
-
-                <div class="agent-card">
-                    <div class="agent-avatar" style="background: rgba(162,155,254,0.1);">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#a29bfe" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                    </div>
-                    <h3>Seu Agente Custom</h3>
-                    <p>Crie agentes personalizados para qualquer necessidade do seu negócio.</p>
-                    <span class="agent-badge">Em breve</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- FREE YOURSELF -->
-        <section class="free-section">
-            <h2>Livre-se de tudo que<br><span class="gradient">não é sua atividade principal</span></h2>
-            <p>
-                Você não abriu um negócio pra ficar postando no Instagram, editando vídeo ou organizando planilha.
-                Deixa o Zeta cuidar disso.
-            </p>
-
-            <div class="free-grid">
-                <div class="free-item">
-                    <div class="check">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                    </div>
-                    <span>Criar postagens e stories para redes sociais</span>
-                </div>
-                <div class="free-item">
-                    <div class="check">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                    </div>
-                    <span>Editar e publicar vídeos no YouTube</span>
-                </div>
-                <div class="free-item">
-                    <div class="check">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                    </div>
-                    <span>Gerar imagens e artes profissionais</span>
-                </div>
-                <div class="free-item">
-                    <div class="check">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                    </div>
-                    <span>Gerenciar tarefas e projetos de dev</span>
-                </div>
-                <div class="free-item">
-                    <div class="check">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                    </div>
-                    <span>Responder mensagens e organizar agenda</span>
-                </div>
-                <div class="free-item">
-                    <div class="check">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                    </div>
-                    <span>Automatizar workflows repetitivos</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- PRICING -->
-        <section class="pricing" id="precos">
-            <div class="section-header">
-                <h2>Um plano. Sem complicação.</h2>
-                <p>Acesso completo a todos os agentes do Zeta.</p>
-            </div>
-
-            <div class="pricing-card">
-                <span class="pricing-badge">1º mês grátis</span>
-                <div class="pricing-amount">R$10<span class="period">/mês</span></div>
-                <p class="pricing-cancel">Cancele quando quiser, sem multa.</p>
-
-                <ul class="pricing-benefits">
-                    <li>
-                        <span class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
-                        Todos os agentes especializados inclusos
-                    </li>
-                    <li>
-                        <span class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
-                        Uso ilimitado de tarefas
-                    </li>
-                    <li>
-                        <span class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
-                        Suporte prioritário
-                    </li>
-                </ul>
-
-                <a href="#download" class="btn-primary pricing-cta">Começar grátis</a>
-            </div>
-        </section>
-
-        <!-- DOWNLOADS -->
-        <section class="downloads" id="download">
-            <div class="section-header">
-                <h2>Baixe o Zeta</h2>
-                <p>Disponível para todas as plataformas. Grátis para começar.</p>
-            </div>
-
-            <div class="download-grid">
-                <a href="https://github.com/zeta-ltda/zeta-site/releases/latest/download/Zeta.dmg" class="download-card">
-                    <div class="dl-icon">
-                        <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                    </div>
-                    <span class="platform-name">macOS</span>
-                    <span class="file-info">.dmg</span>
-                    <span class="dl-btn">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                        Download
-                    </span>
-                </a>
-
-                <a href="#" class="download-card" style="opacity: 0.5; pointer-events: none;" aria-disabled="true" tabindex="-1">
-                    <div class="dl-icon">
-                        <svg viewBox="0 0 24 24"><path d="M3 12V6.75l6-1.32v6.48L3 12zm17-9v8.75l-10 .08V5.21L20 3zM3 13l6 .09v6.81l-6-1.15V13zm17 .25V22l-10-1.91V13.1l10 .15z"/></svg>
-                    </div>
-                    <span class="platform-name">Windows</span>
-                    <span class="file-info">Em breve</span>
-                    <span class="dl-btn">Em breve</span>
-                </a>
-
-                <a href="#" class="download-card" style="opacity: 0.5; pointer-events: none;" aria-disabled="true" tabindex="-1">
-                    <div class="dl-icon">
-                        <svg viewBox="0 0 24 24"><path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.368 1.884 1.43.868.07 1.726-.36 2.455-.867.248-.166.473-.498.692-.482.22.017.22.382.22.382.166 1.005.467 1.398.882 1.583.415.182.948.062 1.468-.282.52-.345.974-.832 1.195-1.372a.654.654 0 00-.002-.506c-.104-.256-.39-.354-.662-.452-.272-.096-.544-.191-.593-.508-.058-.326.155-.606.358-.88.199-.271.398-.54.399-.89-.003-.39-.156-.755-.358-1.063a2.864 2.864 0 00-.567-.633l-.036-.028c-.249-.206-.39-.509-.523-.834a9.904 9.904 0 00-.389-.87 4.272 4.272 0 01-.273-.706c-.288-.972-.725-2.396-2.157-3.473-.988-.696-2.258-1.072-4.015-1.072-.063-.146-.105-.295-.125-.453-.564-1.282-1.613-2.14-3.07-2.494-.454-.116-.87-.18-1.204-.372-.333-.192-.605-.474-.788-.907-.07-.138-.108-.3-.108-.474z"/></svg>
-                    </div>
-                    <span class="platform-name">Linux</span>
-                    <span class="file-info">Em breve</span>
-                    <span class="dl-btn">Em breve</span>
-                </a>
-
-                <a href="https://github.com/zeta-ltda/zeta-site/releases/download/android-latest/Zeta.apk" class="download-card">
-                    <div class="dl-icon">
-                        <svg viewBox="0 0 24 24"><path d="M17.523 15.341a.96.96 0 100-1.92.96.96 0 000 1.92m-11.046 0a.96.96 0 100-1.92.96.96 0 000 1.92m11.4-6.02l2.009-3.48a.418.418 0 00-.152-.571.418.418 0 00-.572.15L17.12 8.96c-1.532-.7-3.248-1.09-5.12-1.09s-3.588.39-5.12 1.09L4.838 5.42a.418.418 0 00-.571-.15.418.418 0 00-.153.571l2.009 3.48C2.741 11.2.404 14.791.404 18.86h23.192c0-4.069-2.337-7.66-5.72-9.54"/></svg>
-                    </div>
-                    <span class="platform-name">Android</span>
-                    <span class="file-info">.apk</span>
-                    <span class="dl-btn">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                        Download
-                    </span>
-                </a>
-
-                <a href="#" class="download-card" style="opacity: 0.5; pointer-events: none;" aria-disabled="true" tabindex="-1">
-                    <div class="dl-icon">
-                        <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                    </div>
-                    <span class="platform-name">iOS</span>
-                    <span class="file-info">Em breve</span>
-                    <span class="dl-btn">Em breve</span>
-                </a>
-
-                <a href="#" class="download-card" style="opacity: 0.5; pointer-events: none;" aria-disabled="true" tabindex="-1">
-                    <div class="dl-icon">
-                        <svg viewBox="0 0 24 24"><path d="M15 5V3a1 1 0 00-1-1h-4a1 1 0 00-1 1v2a5 5 0 00-2 4v6a5 5 0 002 4v2a1 1 0 001 1h4a1 1 0 001-1v-2a5 5 0 002-4V9a5 5 0 00-2-4zm-5-2h4v1.09c-.65-.15-1.32-.24-2-.24s-1.35.09-2 .24V3zm4 18h-4v-1.09c.65.15 1.32.24 2 .24s1.35-.09 2-.24V21zm2-6a4 4 0 01-4 4h0a4 4 0 01-4-4V9a4 4 0 014-4h0a4 4 0 014 4v6z"/></svg>
-                    </div>
-                    <span class="platform-name">Smartwatch</span>
-                    <span class="file-info">Em breve</span>
-                    <span class="dl-btn">Em breve</span>
-                </a>
-
-                <a href="#" class="download-card" style="opacity: 0.5; pointer-events: none;" aria-disabled="true" tabindex="-1">
-                    <div class="dl-icon">
-                        <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8a1 1 0 001 1h1a1 1 0 001-1v-1h12v1a1 1 0 001 1h1a1 1 0 001-1v-8l-2.08-5.99zM6.5 16A1.5 1.5 0 118 14.5 1.5 1.5 0 016.5 16zm11 0a1.5 1.5 0 111.5-1.5 1.5 1.5 0 01-1.5 1.5zM5 11l1.5-4.5h11L19 11z"/></svg>
-                    </div>
-                    <span class="platform-name">Carro</span>
-                    <span class="file-info">Em breve</span>
-                    <span class="dl-btn">Em breve</span>
-                </a>
-            </div>
-        </section>
-
-        <!-- FOOTER -->
-        <footer>
-            <div class="footer-logo">zeta</div>
-            <p>&copy; 2026 Zeta LTDA. Todos os direitos reservados.</p>
-        </footer>
+<nav class="nav">
+  <div class="container">
+    <a class="brand" href="/"><img src="/assets/zeta-mark.svg" alt="">Zeta</a>
+    <div class="nav-links">
+      <a href="#funcionalidades">Funcionalidades</a>
+      <a href="#seus-dados">Seus dados</a>
+      <a href="#baixar">Baixar</a>
+      <a class="btn btn-primary btn-small" href="https://app.zeta-assistant.com">Entrar</a>
     </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <span class="badge">Beta aberto · grátis</span>
+    <h1>Conversa como o ChatGPT. Cuida da casa como a Alexa. <span class="accent">Trabalha como o Claude.</span></h1>
+    <p class="lead">Tudo num assistente só, por voz ou texto — no celular, no computador e no tablet.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#baixar">Baixar o Zeta</a>
+      <a class="btn btn-ghost" href="https://app.zeta-assistant.com">Usar no navegador</a>
+    </div>
+    <p class="hero-note">Grátis durante o beta. Entre com sua conta Google.</p>
+  </div>
+</header>
+
+<section class="soft">
+  <div class="container">
+    <div class="section-head">
+      <h2>Três assistentes em um</h2>
+      <p>Você não precisa escolher entre conversar, controlar a casa e mandar fazer. O Zeta entende o pedido e chama quem resolve.</p>
+    </div>
+    <div class="grid grid-3">
+      <div class="card">
+        <span class="like">como o ChatGPT</span>
+        <h3>Conversa</h3>
+        <p>Pergunte, peça um texto, mande uma foto ou um PDF pra analisar. Por voz, com interrupção natural, ou digitando.</p>
+      </div>
+      <div class="card">
+        <span class="like">como a Alexa</span>
+        <h3>Cuida da casa</h3>
+        <p>Liga a luz, o ar, a TV e as cenas da sua casa com a frase que você falaria pra uma pessoa.</p>
+      </div>
+      <div class="card">
+        <span class="like">como o Claude</span>
+        <h3>Trabalha por você</h3>
+        <p>Usa o seu computador, escreve código e organiza a sua agenda — e segue trabalhando enquanto você faz outra coisa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="funcionalidades">
+  <div class="container">
+    <div class="section-head">
+      <h2>O que o Zeta faz hoje</h2>
+      <p>Só o que já funciona. O que ainda está chegando aparece lá embaixo, marcado como "em breve".</p>
+    </div>
+    <div class="grid grid-4">
+      <div class="card">
+        <div class="icon">🎙️</div>
+        <h3>Voz e texto</h3>
+        <p>Fale ou digite. Diga "Ok Zeta" e peça — a conversa continua do celular pro computador.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🏠</div>
+        <h3>Casa</h3>
+        <p>Luzes, tomadas, ar-condicionado, TV, cortinas e cenas, pelo Home Assistant.</p>
+        <p class="req">Precisa de um Home Assistant na sua casa.</p>
+      </div>
+      <div class="card">
+        <div class="icon">💻</div>
+        <h3>Seu computador</h3>
+        <p>O Zeta usa o mouse e o teclado do seu Mac pra abrir apps, preencher e clicar por você — até pedindo pelo celular.</p>
+        <p class="req">Precisa do Zeta para macOS.</p>
+      </div>
+      <div class="card">
+        <div class="icon">📅</div>
+        <h3>Agenda do Google</h3>
+        <p>Cria, consulta, remarca e cancela eventos, com recorrência e convidados: "toda segunda às 9h, reunião com a Luiza".</p>
+        <p class="req">Só acessa a sua agenda se você conectar a conta Google em Integrações.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🧑‍💻</div>
+        <h3>Código</h3>
+        <p>Escreve, explica, revisa e corrige código direto na conversa.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🔁</div>
+        <h3>Rotinas</h3>
+        <p>Tarefas que se repetem: "todo dia às 8h, me manda um resumo".</p>
+      </div>
+      <div class="card">
+        <div class="icon">🎨</div>
+        <h3>Imagens</h3>
+        <p>Cria artes, logos e ilustrações a partir de uma descrição.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🔎</div>
+        <h3>Produto por foto</h3>
+        <p>Mande a foto de um produto e o Zeta acha onde comprar, com preço.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="soft" id="cenarios">
+  <div class="container">
+    <div class="section-head">
+      <h2>No dia a dia</h2>
+      <p>Pedidos de verdade, do jeito que você falaria.</p>
+    </div>
+    <div class="grid grid-2">
+      <div class="card scenario">
+        <div class="icon">🍳</div>
+        <h3>Da cozinha, sem largar a panela</h3>
+        <p class="quote">"Ok Zeta, apaga a luz da sala e marca o dentista pra quinta às 15h."</p>
+        <p>A luz apaga na hora e o compromisso aparece na sua agenda do Google.</p>
+      </div>
+      <div class="card scenario">
+        <div class="icon">📱</div>
+        <h3>Longe do computador, o trabalho anda</h3>
+        <p class="quote">"Abre a planilha de vendas no meu Mac e me fala o total do mês."</p>
+        <p>Você pede pelo celular; o Zeta faz no computador e te conta o resultado.</p>
+      </div>
+      <div class="card scenario">
+        <div class="icon">👨‍👩‍👧</div>
+        <h3>A agenda da casa em dia</h3>
+        <p class="quote">"Toda segunda às 9h, reunião com a Luiza. Convida ela."</p>
+        <p>Evento recorrente criado na agenda compartilhada, com convite por e-mail.</p>
+      </div>
+      <div class="card scenario">
+        <div class="icon">💬</div>
+        <h3>Uma conversa que segue você</h3>
+        <p class="quote">"Continua aquela ideia de ontem."</p>
+        <p>Começa no celular, continua no computador ou no tablet da sala — o Zeta lembra do contexto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="seus-dados">
+  <div class="container">
+    <div class="section-head">
+      <h2>Seus dados, sem letra miúda</h2>
+      <p>O Zeta só acessa o que você conecta, e você desconecta quando quiser.</p>
+    </div>
+    <ul class="data-list">
+      <li><strong>Entrar com Google</strong><span>Usamos seu nome, e-mail e foto só pra criar e identificar a sua conta.</span></li>
+      <li><strong>Google Agenda, só se você conectar</strong><span>O Zeta lê e altera eventos apenas quando você pede. Em Configurações → Integrações você desconecta, e o acesso é revogado no Google.</span></li>
+      <li><strong>Conversas</strong><span>Ficam guardadas pra o Zeta lembrar do contexto. O conteúdo é processado pelos provedores de IA que usamos (Anthropic e OpenAI) só pra responder você.</span></li>
+      <li><strong>Sem venda, sem anúncio, sem treino</strong><span>Não vendemos seus dados, não usamos pra publicidade e não usamos pra treinar modelos de IA.</span></li>
+    </ul>
+    <p class="center"><a href="/privacidade">Leia a política de privacidade completa →</a></p>
+  </div>
+</section>
+
+<section class="soft" id="em-breve">
+  <div class="container">
+    <div class="section-head">
+      <h2>Em breve</h2>
+      <p>O que estamos construindo agora. Ainda não está disponível.</p>
+    </div>
+    <div class="grid grid-4">
+      <div class="card soon"><h3>Postar nas redes</h3><p>Publicar no Instagram, no TikTok e no X por você.</p></div>
+      <div class="card soon"><h3>Editar vídeos</h3><p>Cortar e montar vídeos curtos a partir do que você gravou.</p></div>
+      <div class="card soon"><h3>Windows e Linux</h3><p>O app de desktop para além do macOS.</p></div>
+      <div class="card soon"><h3>Seus agentes</h3><p>Criar agentes do seu jeito, pro seu trabalho.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="preco">
+  <div class="container">
+    <div class="section-head">
+      <h2>Preço</h2>
+    </div>
+    <div class="card price-card">
+      <div class="price">Grátis</div>
+      <p>durante o beta</p>
+      <ul>
+        <li>Todas as funcionalidades liberadas</li>
+        <li>Sem cartão de crédito</li>
+        <li>Quando a cobrança chegar, você é avisado com 30 dias de antecedência e decide se continua</li>
+      </ul>
+      <a class="btn btn-primary" href="https://app.zeta-assistant.com">Começar agora</a>
+    </div>
+  </div>
+</section>
+
+<section class="soft" id="baixar">
+  <div class="container">
+    <div class="section-head">
+      <h2>Baixe o Zeta</h2>
+      <p>A mesma conta em todos os aparelhos.</p>
+    </div>
+    <div class="grid grid-4">
+      <div class="card dl">
+        <h3>macOS</h3>
+        <p class="muted">Apple Silicon (M1 ou mais novo)</p>
+        <a class="btn btn-primary btn-small" href="https://github.com/zeta-ltda/zeta-site/releases/latest/download/Zeta.dmg">Baixar .dmg</a>
+      </div>
+      <div class="card dl">
+        <h3>Android</h3>
+        <p class="muted">Celular e tablet</p>
+        <a class="btn btn-primary btn-small" href="https://github.com/zeta-ltda/zeta-site/releases/download/android-latest/Zeta.apk">Baixar .apk</a>
+      </div>
+      <div class="card dl">
+        <h3>Navegador</h3>
+        <p class="muted">Qualquer computador</p>
+        <a class="btn btn-ghost btn-small" href="https://app.zeta-assistant.com">Abrir o Zeta</a>
+      </div>
+      <div class="card dl">
+        <h3>iPhone</h3>
+        <p class="muted">Abra <a href="https://app.zeta-assistant.com">app.zeta-assistant.com</a> no Safari, toque em Compartilhar e em "Adicionar à Tela de Início".</p>
+      </div>
+    </div>
+    <p class="center hero-note">Windows e Linux: em breve.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="/privacidade">Política de privacidade</a>
+      <a href="/termos">Termos de uso</a>
+      <a href="/en/privacy">English</a>
+      <a href="mailto:my.zeta.assistant@gmail.com">Contato</a>
+    </div>
+    <p>© 2026 PABLO ALFONSO TEIXEIRA UNGARO LTDA · CNPJ 47.460.147/0001-28 · <a href="mailto:my.zeta.assistant@gmail.com">my.zeta.assistant@gmail.com</a></p>
+    <p class="disclaimer">ChatGPT, Alexa e Claude são marcas de seus respectivos donos. O Zeta não é afiliado, patrocinado nem endossado por OpenAI, Amazon ou Anthropic — as comparações descrevem o tipo de tarefa que o Zeta faz.</p>
+  </div>
+</footer>
+
 </body>
 </html>
